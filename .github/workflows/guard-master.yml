@@ -1,0 +1,19 @@
+name: guard master
+on:
+  pull_request:
+    branches: [master]
+jobs:
+  guard:
+    name: only dev into master
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify the PR head branch is dev
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          if [ "$HEAD_REF" = "dev" ]; then
+            echo "OK: PR into master comes from 'dev'."
+          else
+            echo "::error::PRs into 'master' must come from 'dev' (got '$HEAD_REF')."
+            exit 1
+          fi
